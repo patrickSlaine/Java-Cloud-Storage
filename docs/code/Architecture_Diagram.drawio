@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2024-02-04T16:03:00.650Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" version="22.1.16" etag="2HhvtpMCGnv4PzUPcYvu" type="device">
+  <diagram id="kcH0AlU4yCr1ZuP2z7qD" name="Page-1">
+    <mxGraphModel dx="1050" dy="522" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-3" value="App Service&lt;br&gt;Storage Application" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/app_services/App_Services.svg;" vertex="1" parent="1">
+          <mxGeometry x="280" y="480" width="64" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-5" value="Azure SQL&lt;br&gt;Database" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/databases/Azure_SQL.svg;" vertex="1" parent="1">
+          <mxGeometry x="509" y="487" width="64" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-6" value="Blob Storage" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/BlobBlock.svg;" vertex="1" parent="1">
+          <mxGeometry x="377.1" y="340" width="61.9" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-8" value="" style="endArrow=none;html=1;rounded=0;entryX=-0.015;entryY=0.577;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;exitX=0.506;exitY=-0.056;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="tEG7eG4stbIzh-dS_ztT-3" target="tEG7eG4stbIzh-dS_ztT-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="410" as="sourcePoint" />
+            <mxPoint x="170" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="312" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-11" value="File Transfer" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="tEG7eG4stbIzh-dS_ztT-8">
+          <mxGeometry x="-0.2759" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-12" value="" style="endArrow=none;html=1;rounded=0;entryX=0.038;entryY=0.557;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="tEG7eG4stbIzh-dS_ztT-3" target="tEG7eG4stbIzh-dS_ztT-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410" y="550" as="sourcePoint" />
+            <mxPoint x="460" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-13" value="SQL&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="tEG7eG4stbIzh-dS_ztT-12">
+          <mxGeometry x="-0.1692" relative="1" as="geometry">
+            <mxPoint x="11" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-15" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="480" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-16" value="" style="endArrow=none;html=1;rounded=0;entryX=-0.019;entryY=0.431;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tEG7eG4stbIzh-dS_ztT-15" target="tEG7eG4stbIzh-dS_ztT-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="550" as="sourcePoint" />
+            <mxPoint x="160" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tEG7eG4stbIzh-dS_ztT-17" value="HTTP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="tEG7eG4stbIzh-dS_ztT-16">
+          <mxGeometry x="0.4165" y="-1" relative="1" as="geometry">
+            <mxPoint x="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
