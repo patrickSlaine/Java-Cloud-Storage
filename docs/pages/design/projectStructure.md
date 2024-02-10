@@ -11,12 +11,12 @@ This application will implement the follow design patterns:
 
 ## ___Folder Structure___
 
-- Communication
+- Communication - APIS / Authentication / Authorisation
     - Controllers
     - Security
-- Application
+- Application - Business Layer
     - Handlers
-- Infrastructure
+- Infrastructure - Database Interactions / Beans / Value Objects
     - Entities
     - Value Objects
     - Repositories
