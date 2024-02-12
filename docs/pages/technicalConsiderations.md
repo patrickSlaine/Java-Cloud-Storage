@@ -12,8 +12,6 @@ This document contains considerations that must be made when making decisions ab
         - File Deletion
 - Administator Levels
     - Admin (Top Level Admin - Contains access of all other admin types)
-    - File Admin - Read, Update & Deletion access to all users files.
-    - Database Admin - CRUD access to User database records.
     - User - Can CRUD their own files. Do not have access to any other user files.
 - Files must be Encrypted at Rest.
 - Files must have a Unique ID which will be used to interact with them.

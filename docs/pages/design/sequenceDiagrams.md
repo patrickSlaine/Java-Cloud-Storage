@@ -110,13 +110,13 @@ sequenceDiagram
     actor Requestor
     Requestor ->>+ FileController: HTTP GET /file/{fileId}/{requestorId}
     FileController ->>+ RetrieveFileHandler: handle(RetrieveFileCommand command)
-    RetrieveFileHandler ->>+ UserRepository: getUser(requestorId)
+    RetrieveFileHandler ->>+ UserRepository: getUser(UUID requestorId)
     UserRepository ->>+ RetrieveFileHandler: return User
     alt IF User == null
         RetrieveFileHandler -->>+ FileController: throw UserNotFoundException
     end
 
-    RetrieveFileHandler ->>+ FileRepository: getFileDetails(fileId)
+    RetrieveFileHandler ->>+ FileRepository: getFileDetails(UUID fileId)
     FileRepository -->>+ RetrieveFileHandler: return FileDetails
     alt IF FileDetails == null
         RetrieveFileHandler -->>+ FileController: throw FileNotFoundException
@@ -139,14 +139,14 @@ sequenceDiagram
     actor Requestor
     Requestor ->>+ FileController: HTTP PUT /file/{fileId}/{requestorId} w\ File
     FileController ->>+ UpdateFileHandler: handle(UpdateFileCommand command)
-    UpdateFileHandler ->>+ UserRepository: getUser(requestorId)
+    UpdateFileHandler ->>+ UserRepository: getUser(UUID requestorId)
     UserRepository -->>+ UpdateFileHandler: return User
 
     alt IF User == null
         UpdateFileHandler -->>+ FileController: throw UserNotFoundException
     end
 
-    UpdateFileHandler ->>+ FileRepository: getFile(fileId)
+    UpdateFileHandler ->>+ FileRepository: getFile(UUID fileId)
     FileRepository -->>+ UpdateFileHandler: return FileDetails
 
     alt IF FileDetails == null
@@ -170,4 +170,84 @@ sequenceDiagram
     FileRepository -->>+ RetrieveFileHandler: return boolean
     RetrieveFileHandler -->>+ FileController: return boolean
     FileController -->>+ Requestor: HTTP Response w/ Json Content
+```
+
+### ___Delete File___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ FileController: HTTP DELETE /file/{fileId}/{requestorId}
+    FileController ->>+ DeleteFileHandler: handle(DeleteFileCommand command)
+    DeleteFileHandler ->>+ UserRepository: getUser(UUID requestorId)
+    UserRepository -->>+ DeleteFileHandler: return User
+    
+    alt IF user == null
+        DeleteFileHandler -->>+ FileController: throw UserNotFoundException
+    end
+
+    DeleteFileHandler ->>+ FileRepository: getFile(UUID fileId)
+    FileRepository -->>+ DeleteFileHandler: return FileDetails
+
+    alt IF file == null
+        DeleteFileHandler -->>+ FileController: throw FileNotFoundException
+    end 
+
+    alt IF file.creatorId != requestorId && user.isAdmin != true
+        DeleteFileHandler -->>+ FileController: throw InvalidUserException
+    end
+
+    DeleteFileHandler ->>+ FileManagementImp: deleteFile(string fileUri)
+    FileManagementImp -->>+ DeleteFileHandler: return void
+
+    DeleteFileHandler ->>+ FileRepository: deleteFile(fileId,requestorId)
+    FileRepository -->>+ DeleteFileHandler: return void
+
+    DeleteFileHandler -->>+ FileController: return boolean
+    FileController -->>+ Requestor: HTTP Response w/ Json Data
+```
+
+### ___Get File List___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ FileController: HTTP GET /file/all/{userId}
+    FileController ->>+ GetFileListHandler: handle(GetFileListCommand command)
+    GetFileListHandler ->>+ UserRepository: getUser(UUID userId)
+    UserRepository -->>+ GetFileListHandler: return User
+
+    alt IF User == null
+        GetFileListHandler -->>+ FileController: throw UserNotFoundException
+    end
+
+    GetFileListHandler ->>+ FileRepository: getFileList(UUID userId)
+    FileRepository -->>+ GetFileListHandler: return List<FileDetails>
+    GetFileListHandler -->>+ FileController: return List<FileDetails>
+    FileController -->>+ Requestor: HTTP Response w/ Paginated Json Data
+
+```
+
+## ___Admin Functionality___
+
+### ___Get User List___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ AdminController: HTTP GET /admin/{adminId}
+    AdminController ->>+ GetUserListHandler: handle(GetUserListCommand command)
+    GetUserListHandler ->>+ UserRepository: getUser(UUID adminId)
+    UserRepository -->>+ GetUserListHandler: return User
+
+    alt IF User == null 
+        GetUserListHandler -->>+ AdminController: throw UserNotFoundException
+    end
+
+    alt IF user.isAdmin != true
+        GetUserListHandler -->>+ AdminController: throw InvalidUserException
+    end
+
+    GetUserListHandler ->>+ UserRepository: getUserList(UUID adminId)
+    UserRepository -->>+ GetUserListHandler: return List<User>
+
+    GetUserListHandler -->>+ AdminController: return List<User>
+    AdminController -->>+ Requestor: HTTP Response w/ Paginated Json Data
 ```

@@ -66,6 +66,13 @@ ___**Important Note** - All endpoints will be written using HTTP___
         - 400 BAD REQUEST
         - 404 NOT FOUND
         - 500 INTERNAL SERVER ERROR
+- GET File List
+    - Receives User UUID
+    - Returns 
+        - 200 OK w\ File List
+        - 400 BAD REQUEST
+        - 404 NOT FOUND
+        - 500 INTERNAL SERVER ERROR
 
 ## ___Admin Endpoints___
 - GET User List
@@ -75,17 +82,5 @@ ___**Important Note** - All endpoints will be written using HTTP___
         - 400 BAD REQUEST
         - 404 NOT FOUND
         - 500 INTERNAL SERVER ERROR
-- GET User Privileges
-    - Receives Admin UUID & User UUID
-    - Returns
-        - 200 OK w\ List of User Privileges
-        - 400 BAD REQUEST
-        - 404 NOT FOUND
-        - 500 INTERNAL SERVER ERROR
-- POST Add User To Group
-    - Receives Admin UUID, User UUID & Group UUID
-    - Returns
-        - 200 OK
-        - 400 BAD REQUEST
-        - 404 NOT FOUND
-        - 500 INTERNAL SERVER ERROR
+
+

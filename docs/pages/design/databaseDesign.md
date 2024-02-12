@@ -3,6 +3,4 @@
 
 1. User entity is used to represent all users such Normal Users and Administrators.
 2. Users are linked to the File's entity via the UserFile entity.
-3. Administrative Users are linked to Groups via the UserGroup entity.
-    - Groups are used to represent the different Admin roles such as **Admin**, **File Admin** & **Database Admin**.
-4. The FileActivityLog entity will be used to log every Create, Read, Update or Delete event which occurs for any file within the system. This will allow for a traceable audit log to be produced.
+3. The FileActivityLog entity will be used to log every Create, Read, Update or Delete event which occurs for any file within the system. This will allow for a traceable audit log to be produced.
