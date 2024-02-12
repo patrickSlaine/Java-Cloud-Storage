@@ -97,10 +97,38 @@ sequenceDiagram
 
     SaveFileHandler ->>+ FileManagementImp: saveFile(File file)
     FileManagementImp -->>+ SaveFileHandler: return String
-    SaveFileHandler ->>+ FileRepository: saveFileReference(File file, User user)
+    SaveFileHandler ->>+ FileRepository: saveFileReference(FileDetails file, User user)
     FileRepository -->>+ SaveFileHandler: return boolean
 
     SaveFileHandler -->>+ FileController: return boolean
     FileController -->>+ Requestor: HTTP Response w/ Json Date
+```
 
+### ___Get File___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ FileController: HTTP GET /file/{fileId}/{requestorId}
+    FileController ->>+ RetrieveFileHandler: retrieveFile(UUID fileId,UUID requestorId)
+    RetrieveFileHandler ->>+ UserRepository: getUser(requestorId)
+    UserRepository ->>+ RetrieveFileHandler: return User
+    alt IF User == null
+        RetrieveFileHandler -->>+ FileController: throw UserNotFoundException
+    end
+
+    RetrieveFileHandler ->>+ FileRepository: getFileDetails(fileId)
+    FileRepository -->>+ RetrieveFileHandler: return FileDetails
+    alt IF FileDetails == null
+        RetrieveFileHandler -->>+ FileController: throw FileNotFoundException
+    end
+
+    alt IF File.creatorId != requestorId
+        RetrieveFileHandler -->>+ FileController: throw InvalidUserException
+    end
+
+    RetrieveFileHandler ->>+ FileManagementImp: getFile(string fileURI)
+    FileManagementImp -->>+ RetrieveFileHandler: return File
+
+    RetrieveFileHandler -->>+ FileControler: return File
+    FileController -->>+ Requestor: HTTP Response w/ File
 ```
