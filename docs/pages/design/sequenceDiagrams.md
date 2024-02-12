@@ -251,3 +251,28 @@ sequenceDiagram
     GetUserListHandler -->>+ AdminController: return List<User>
     AdminController -->>+ Requestor: HTTP Response w/ Paginated Json Data
 ```
+
+### ___Get User's File List___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ AdminController: HTTP GET /admin/file/{adminId}/{userId}
+    AdminController ->>+ GetUserFileListHandler: handle(GetUserFileListCommand command)
+    GetUserFileListHandler ->>+ UserRepository: getUser(UUID adminId)
+    UserRepository -->>+ GetUserFileListHandler: return User
+    alt IF AdminUser == null
+        GetUserFileListHandler -->>+ AdminController: throw UserNotFoundException
+    end 
+
+    GetUserFileListHandler ->>+ UserRepository: getUser(UUID userId)
+    UserRepository -->>+ GetUserFileListHandler: return User
+
+    alt IF User == null
+        GetUserFileListHandler -->>+ AdminController: throw UserNotFoundException
+    end
+
+    GetUserFileListHandler ->>+ FileRepository: getFileList(UUID userId)
+    FileRepository -->>+ GetUserFileListHandler: return List<FileDetails>
+    GetUserFileListHandler -->>+ AdminController: return List<FileDetails>
+    AdminController ->>+ Requestor: HTTP Response w/ Paginated JSON Data
+```
