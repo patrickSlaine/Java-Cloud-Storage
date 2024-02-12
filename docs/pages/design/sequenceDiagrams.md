@@ -12,7 +12,7 @@ The sequence diagrams will be used during the **Requirement Analysis** process t
 sequenceDiagram
     actor Requestor
     Requestor ->>+ UserController: HTTP GET /user/{UUID}
-    UserController->>+GetUserHandler: fetchUserInformation(User UUID)
+    UserController->>+GetUserHandler: handle(GetUserCommand command)
     GetUserHandler ->>+ UserRepository: getUser(UUID)
     UserRepository -->>+ GetUserHandler: return User
     GetUserHandler -->>+ UserController: return User
@@ -24,9 +24,9 @@ sequenceDiagram
 sequenceDiagram
     actor Requestor
     Requestor ->>+ UserController: HTTP POST /user with JSON Content
-    UserController ->>+ CreateUserHandler: createUser(CreateUserValueObject object)
+    UserController ->>+ CreateUserHandler: handle(CreateUserCommand command)
     CreateUserHandler ->>+ UserRepository: createUser(User user)
-    UserRepository -->>+ CreateUserHandler: return Boolean
+    UserRepository -->>+ CreateUserHandler: return boolean
     CreateUserHandler ->>+ UserRepository: findUserByUserName(String username)
     UserRepository -->>+ CreateUserHandler: return User
     CreateUserHandler -->>+ UserController: return UUID
@@ -38,10 +38,10 @@ sequenceDiagram
 sequenceDiagram
     actor Requestor
     Requestor ->>+ UserController: HTTP DELETE /user (UUID userId, UUID deletorId)
-    UserController ->>+ DeleteUserHandler: deleteUser(UUID userId, UUID deletorId)
+    UserController ->>+ DeleteUserHandler: handle(DeleteUserCommand command)
     alt If userId != deletorId
         DeleteUserHandler ->>+ UserRespository: isAdminUser(UUID id)
-        UserRespository -->>+ DeleteUserHandler: return Boolean
+        UserRespository -->>+ DeleteUserHandler: return boolean
     end
 
     alt If adminUser == true || userRequested == true
@@ -58,10 +58,10 @@ sequenceDiagram
 sequenceDiagram
     actor Requestor
     Requestor ->>+ UserController: HTTP PUT /user (UUID userId, UUID requestorId, UpdateUserObject object)
-    UserController ->>+ UpdateUserHandler: updateUser(UpdateUserValueObject object)
+    UserController ->>+ UpdateUserHandler: handle(UpdateUserCommand command)
     alt If userId != requestorId
         UpdateUserHandler ->>+ UserRepository: isAdminUser(UUID id)
-        UserRepository -->>+ UpdateUserHandler: return Boolean
+        UserRepository -->>+ UpdateUserHandler: return boolean
     end
 
     alt If adminUser == true || userRequested == true
@@ -82,7 +82,7 @@ sequenceDiagram
 sequenceDiagram
     actor Requestor
     Requestor ->>+ FileController: HTTP POST /file
-    FileController ->>+ SaveFileHandler: saveFile(File file, UUID userId)
+    FileController ->>+ SaveFileHandler: handle(GetFileCommand command)
     SaveFileHandler ->>+ FileSecurityImp: checkFile(File file)
     FileSecurityImp -->>+ SaveFileHandler: return boolean
     alt If fileValid != true
@@ -109,7 +109,7 @@ sequenceDiagram
 sequenceDiagram
     actor Requestor
     Requestor ->>+ FileController: HTTP GET /file/{fileId}/{requestorId}
-    FileController ->>+ RetrieveFileHandler: retrieveFile(UUID fileId,UUID requestorId)
+    FileController ->>+ RetrieveFileHandler: handle(RetrieveFileCommand command)
     RetrieveFileHandler ->>+ UserRepository: getUser(requestorId)
     UserRepository ->>+ RetrieveFileHandler: return User
     alt IF User == null
@@ -122,7 +122,7 @@ sequenceDiagram
         RetrieveFileHandler -->>+ FileController: throw FileNotFoundException
     end
 
-    alt IF File.creatorId != requestorId
+    alt IF FileDetails.creatorId != requestorId && user.isAdmin() != true
         RetrieveFileHandler -->>+ FileController: throw InvalidUserException
     end
 
@@ -131,4 +131,43 @@ sequenceDiagram
 
     RetrieveFileHandler -->>+ FileControler: return File
     FileController -->>+ Requestor: HTTP Response w/ File
+```
+
+### ___Update File___
+```mermaid
+sequenceDiagram
+    actor Requestor
+    Requestor ->>+ FileController: HTTP PUT /file/{fileId}/{requestorId} w\ File
+    FileController ->>+ UpdateFileHandler: handle(UpdateFileCommand command)
+    UpdateFileHandler ->>+ UserRepository: getUser(requestorId)
+    UserRepository -->>+ UpdateFileHandler: return User
+
+    alt IF User == null
+        UpdateFileHandler -->>+ FileController: throw UserNotFoundException
+    end
+
+    UpdateFileHandler ->>+ FileRepository: getFile(fileId)
+    FileRepository -->>+ UpdateFileHandler: return FileDetails
+
+    alt IF FileDetails == null
+
+        RetrieveFileHandler -->>+ FileController: throw FileNotFoundException
+    end
+
+    alt IF FileDetails.creatorId != requestorId && user.isAdmin() != true
+        RetrieveFileHandler -->>+ FileController: throw InvalidUserException
+    end
+
+    RetrieveFileHandler ->>+ FileSecurityImp: checkFile(File file)
+    FileSecurityImp -->>+ RetrieveFileHandler: return boolean
+    alt If fileValid != true
+    RetrieveFileHandler -->>+ FileController: throw FileNotValidException
+    end
+
+    RetrieveFileHandler ->>+ FileManagementImp: updateFile(File file)
+    FileManagementImp -->>+ RetrieveFileHandler: return String
+    RetrieveFileHandler ->>+ FileRepository: updateFileReference(FileDetails file, requestorId)
+    FileRepository -->>+ RetrieveFileHandler: return boolean
+    RetrieveFileHandler -->>+ FileController: return boolean
+    FileController -->>+ Requestor: HTTP Response w/ Json Content
 ```
